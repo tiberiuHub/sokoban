@@ -1,0 +1,46 @@
+// Copyright Tiberiu 2025
+
+#pragma once
+
+#include <tiage/IAsciiRenderer.h>
+#include "Warehouse.h"
+#include <Windows.h>
+
+namespace sokoban {
+
+class Game {
+public:
+
+	Game(Warehouse warehouse, tiage::IAsciiRenderer& renderer);
+
+	Game(tiage::IAsciiRenderer& renderer);
+
+	void runGame();
+
+	void loadLevel(const std::string& filePath);
+
+private:
+
+	bool objectIsCrateOnDelivery(const Object& obj) const;
+
+	bool posIsInvalid(tiage::Position Pos) const;
+
+	tiage::Position dirFromKey(char key);
+
+	void attemptPlayerMove(char key);
+
+	bool checkVictory();
+
+	void handleInput(char key);
+
+	void renderCurrentWarehouse() const;
+
+	Warehouse currentWarehouse_;
+
+	tiage::IAsciiRenderer& renderer_;
+
+	bool gameRunning_ = false;
+
+};
+
+} // sokoban

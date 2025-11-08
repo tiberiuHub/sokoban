@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18.0)
 include_guard(GLOBAL)
-project(sokoban2)
+project(sokoban)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -8,7 +8,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(TARGET ${PROJECT_NAME})
 
-add_subdirectory("D:/Visual Studio Projects/tiage" "tiage_build")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/tiage" "tiage_lib")
 
 add_executable(${TARGET} 
     "${CMAKE_CURRENT_SOURCE_DIR}/Floor.cpp"
@@ -25,7 +25,7 @@ add_executable(${TARGET}
 # Include directories
 target_include_directories(${TARGET}       
     PRIVATE  
-        "D:/Visual Studio Projects/tiage/inc"   
+        "${CMAKE_CURRENT_SOURCE_DIR}/tiage/inc"   
 )
 
 # Link the tiage library

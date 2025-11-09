@@ -1,10 +1,10 @@
 // Copyright Tiberiu 2025
 
-#include <tiage/StdoutRenderer.h>
+#include <tiage/WinConsole.h>
 #include "Game.h"
 
 int main() {
-    tiage::StdoutRenderer renderer(1,1);
+    tiage::WinConsole renderer(50,50);
     sokoban::Game game(renderer);
     renderer.setCursorVisible(false);
     game.loadLevel("C:/Users/oana/Desktop/debug.lvl");

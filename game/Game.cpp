@@ -10,14 +10,14 @@ namespace sokoban {
 
 // -------------------------------------------------------------------------------------------------
 
-Game::Game(Warehouse warehouse, tiage::IAsciiRenderer& renderer):
+Game::Game(Warehouse warehouse, tiage::IConsole& renderer):
 	currentWarehouse_(std::move(warehouse)),
 	renderer_(renderer) {
 }
 
 // -------------------------------------------------------------------------------------------------
 
-Game::Game(tiage::IAsciiRenderer& renderer) :
+Game::Game(tiage::IConsole& renderer) :
 	currentWarehouse_(Warehouse(5, 5)),
 	renderer_(renderer) {
 }
@@ -165,10 +165,7 @@ Game::renderCurrentWarehouse() const {
 	auto rows = currentWarehouse_.nRows();
 	auto cols = currentWarehouse_.nCols();
 
-	renderer_.resizeDesiredCanvas(currentWarehouse_.nRows() * 2 - 1, currentWarehouse_.nCols());
-
-	renderer_.beginFrame();
-
+	renderer_.create(currentWarehouse_.nRows() * 2 - 1, currentWarehouse_.nCols());
 
 	for (uint32_t row = 0; row < rows; row++) {
 		for (uint32_t col = 0; col < cols; col++) {
@@ -188,7 +185,7 @@ Game::renderCurrentWarehouse() const {
 			
 	}
 
-	renderer_.render();
+	renderer_.flush();
 }
 
 // -------------------------------------------------------------------------------------------------

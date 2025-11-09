@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <tiage/IAsciiRenderer.h>
+#include <tiage/IConsole.h>
 #include "Warehouse.h"
 #include <Windows.h>
 
@@ -11,9 +11,9 @@ namespace sokoban {
 class Game {
 public:
 
-	Game(Warehouse warehouse, tiage::IAsciiRenderer& renderer);
+	Game(Warehouse warehouse, tiage::IConsole& renderer);
 
-	Game(tiage::IAsciiRenderer& renderer);
+	Game(tiage::IConsole& renderer);
 
 	void runGame();
 
@@ -37,7 +37,7 @@ private:
 
 	Warehouse currentWarehouse_;
 
-	tiage::IAsciiRenderer& renderer_;
+	tiage::IConsole& renderer_;
 
 	bool gameRunning_ = false;
 

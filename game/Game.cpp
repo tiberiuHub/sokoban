@@ -165,21 +165,20 @@ Game::renderCurrentWarehouse() const {
 	auto rows = currentWarehouse_.nRows();
 	auto cols = currentWarehouse_.nCols();
 
-	renderer_.create(currentWarehouse_.nRows() * 2 - 1, currentWarehouse_.nCols());
+	renderer_.create( currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
 
 	for (uint32_t row = 0; row < rows; row++) {
 		for (uint32_t col = 0; col < cols; col++) {
 			auto floor = currentWarehouse_.getFloor({ static_cast<int>(col), static_cast<int>(row) });
-			renderer_.putChar(col, row * 2, floor.color(), floor.chr());
+			renderer_.putChar(row * 2,col , floor.color(), floor.chr());
 		}
 	}
 
-
 	for (auto& object : currentWarehouse_.getObjects()) {
 		if (objectIsCrateOnDelivery(object)) {
-			renderer_.putChar(object.pos().x, object.pos().y * 2, tiage::Color::Green, object.asciiCode());
+			renderer_.putChar( object.pos().y * 2, object.pos().x, tiage::Color::Green, object.asciiCode());
 		} else {
-			renderer_.putChar(object.pos().x, object.pos().y * 2, object.color(), object.asciiCode());
+			renderer_.putChar( object.pos().y * 2, object.pos().x, object.color(), object.asciiCode());
 		}
 			
 			

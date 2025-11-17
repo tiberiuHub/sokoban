@@ -23,9 +23,9 @@ private:
 
 	bool objectIsCrateOnDelivery(const Object& obj) const;
 
-	bool posIsInvalid(tiage::Position Pos) const;
+	bool posIsInvalid(tiage::Vec2 Pos) const;
 
-	tiage::Position dirFromKey(char key);
+	tiage::Vec2 dirFromKey(char key);
 
 	void attemptPlayerMove(char key);
 

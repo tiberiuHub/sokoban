@@ -3,7 +3,7 @@
 #pragma once
 
 #include <vector>
-#include <tiage/Position.h>
+#include <tiage/Vec2.h>
 #include <tiage/Matrix.h>
 #include "Object.h"
 #include "Floor.h"
@@ -15,27 +15,27 @@ public:
 
 	Warehouse(uint32_t width, uint32_t height);
 
-	const std::vector<tiage::Position>& getDeliveryPositions() const;
+	const std::vector<tiage::Vec2>& getDeliveryPositions() const;
 
 	int getPlayerIndex() const;
 
-	uint32_t nRows() const;
+	size_t nRows() const;
 
-	uint32_t nCols() const;
+	size_t nCols() const;
 
-	void parseFromFile(const std::string& filePath);//within files f means floor and o means object
+	void parseFromFile(const std::string& filePath);//within files f means floor and o means object d means dimension
 
-	Floor getFloor(tiage::Position pos) const;
+	Floor getFloor(tiage::Vec2 pos) const;
 	
 	const std::vector<Object>& getObjects() const;
 
-	bool isObjectAtPos(tiage::Position pos) const;
+	bool isObjectAtPos(tiage::Vec2 pos) const;
 
-	int getObjectAtPosIndex(tiage::Position pos) const;
+	int getObjectAtPosIndex(tiage::Vec2 pos) const;
 
-	const std::vector<tiage::Position>& getTargetPositions() const;
+	const std::vector<tiage::Vec2>& getTargetPositions() const;
 
-	void moveObject(size_t index, tiage::Position newPos);
+	void moveObject(size_t index, tiage::Vec2 newPos);
 
 private:
 
@@ -51,7 +51,7 @@ private:
 
 	std::vector<Object> objects_;
 
-	std::vector<tiage::Position> targetPositions_;
+	std::vector<tiage::Vec2> targetPositions_;
 
 };
 

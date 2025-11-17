@@ -3,7 +3,7 @@
 #pragma once
 
 #include <tiage/Color.h>
-#include <tiage/Position.h>
+#include <tiage/Vec2.h>
 #include <unordered_map>
 
 namespace sokoban {
@@ -13,13 +13,13 @@ public:
 
 	enum class Type { Box, Player };
 
-	Object(Type type, tiage::Position pos);
+	Object(Type type, tiage::Vec2 pos);
 
-	void setPos(tiage::Position pos);
+	void setPos(tiage::Vec2 pos);
 
 	Type type() const;
 
-	tiage::Position pos() const;
+	tiage::Vec2 pos() const;
 
 	char asciiCode() const;
 
@@ -29,7 +29,7 @@ private:
 
 	Type type_;
 
-	tiage::Position pos_;
+	tiage::Vec2 pos_;
 
 	char asciiCode_;
 	

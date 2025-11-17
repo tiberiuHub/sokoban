@@ -25,7 +25,7 @@ Game::Game(tiage::IConsole& renderer) :
 // -------------------------------------------------------------------------------------------------
 
 bool
-Game::posIsInvalid(tiage::Position pos) const {
+Game::posIsInvalid(tiage::Vec2 pos) const {
 	return	(pos.x < 0 or pos.x >= currentWarehouse_.nCols()) or
 		(pos.y < 0 or pos.y >= currentWarehouse_.nRows());
 }
@@ -78,7 +78,7 @@ Game::attemptPlayerMove(char key) {
 
 	auto playerPos = currentWarehouse_.getObjects()[playerIndex].pos();
 
-	tiage::Position movePos = { playerPos.x + dir.x, playerPos.y + dir.y };
+	tiage::Vec2 movePos = { playerPos.x + dir.x, playerPos.y + dir.y };
 
 	if (posIsInvalid(movePos) or currentWarehouse_.getFloor(movePos).type() == Floor::Type::Wall) {
 		return;
@@ -95,7 +95,7 @@ Game::attemptPlayerMove(char key) {
 
 		if (currentWarehouse_.getObjects()[objectIndex].type() == Object::Type::Box) {
 
-			tiage::Position nextMovePos = { currentWarehouse_.getObjects()[objectIndex].pos().x + dir.x, currentWarehouse_.getObjects()[objectIndex].pos().y + dir.y };
+			tiage::Vec2 nextMovePos = { currentWarehouse_.getObjects()[objectIndex].pos().x + dir.x, currentWarehouse_.getObjects()[objectIndex].pos().y + dir.y };
 
 
 			if (posIsInvalid(nextMovePos) or
@@ -114,7 +114,7 @@ Game::attemptPlayerMove(char key) {
 
 // -------------------------------------------------------------------------------------------------
 
-tiage::Position
+tiage::Vec2
 Game::dirFromKey(char key) {
 	if (key == 'w') {
 		return { -1,0 };
@@ -165,23 +165,23 @@ Game::renderCurrentWarehouse() const {
 	auto rows = currentWarehouse_.nRows();
 	auto cols = currentWarehouse_.nCols();
 
-	renderer_.create( currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
+	renderer_.create(currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
 
 	for (uint32_t row = 0; row < rows; row++) {
 		for (uint32_t col = 0; col < cols; col++) {
 			auto floor = currentWarehouse_.getFloor({ static_cast<int>(col), static_cast<int>(row) });
-			renderer_.putChar(row * 2,col , floor.color(), floor.chr());
+			renderer_.putChar(row * 2, col, floor.color(), floor.chr());
 		}
 	}
 
 	for (auto& object : currentWarehouse_.getObjects()) {
 		if (objectIsCrateOnDelivery(object)) {
-			renderer_.putChar( object.pos().y * 2, object.pos().x, tiage::Color::Green, object.asciiCode());
+			renderer_.putChar(object.pos().y * 2, object.pos().x, tiage::Color::Green, object.asciiCode());
 		} else {
-			renderer_.putChar( object.pos().y * 2, object.pos().x, object.color(), object.asciiCode());
+			renderer_.putChar(object.pos().y * 2, object.pos().x, object.color(), object.asciiCode());
 		}
-			
-			
+
+
 	}
 
 	renderer_.flush();

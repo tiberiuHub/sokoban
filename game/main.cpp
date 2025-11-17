@@ -4,20 +4,12 @@
 #include "Game.h"
 
 int main() {
-    tiage::WinConsole renderer(50,100);
+    tiage::WinConsole renderer(3,3);
     sokoban::Game game(renderer);
     renderer.setCursorVisible(false);
-    game.loadLevel("C:/Users/oana/Desktop/1.lvl");
+    game.loadLevel("C:/Users/oana/Desktop/debug.lvl");
     game.runGame();
-    //renderer.create(50, 50);
-    //renderer.putChar(0, 0, tiage::Color::Green, 'a');
-    //renderer.putChar(0, 0, tiage::Color::Green, 'a');
-   // renderer.putChar(1, 1, tiage::Color::Green, 'a');
-    //renderer.putChar(1, 0, tiage::Color::Green, 'a');
-   // renderer.flush();
-    
-    //renderer.flush();
-
+    //std::cout << 111;
     //game.loadLevel("C:/Users/oana/Desktop/1.lvl");
     //game.runGame();
     return 0;

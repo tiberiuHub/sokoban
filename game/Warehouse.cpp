@@ -28,7 +28,7 @@ Warehouse::getPlayerIndex() const {
 
 // -------------------------------------------------------------------------------------------------
 
-const std::vector<tiage::Position>&
+const std::vector<tiage::Vec2>&
 Warehouse::getDeliveryPositions() const {
 	return targetPositions_;
 }
@@ -36,14 +36,14 @@ Warehouse::getDeliveryPositions() const {
 // -------------------------------------------------------------------------------------------------
 
 void
-Warehouse::moveObject(size_t index, tiage::Position newPos) {
+Warehouse::moveObject(size_t index, tiage::Vec2 newPos) {
 	objects_[index].setPos(newPos);
 }
 
 // -------------------------------------------------------------------------------------------------
 
 bool
-Warehouse::isObjectAtPos(tiage::Position pos) const {
+Warehouse::isObjectAtPos(tiage::Vec2 pos) const {
 	for (size_t i = 0; i < objects_.size(); i++) {
 		if ((objects_[i].pos().x == pos.x) and (objects_[i].pos().y == pos.y)) {
 				return true;
@@ -55,7 +55,7 @@ Warehouse::isObjectAtPos(tiage::Position pos) const {
 // -------------------------------------------------------------------------------------------------
 
 int
-Warehouse::getObjectAtPosIndex(tiage::Position pos) const {
+Warehouse::getObjectAtPosIndex(tiage::Vec2 pos) const {
 	for (size_t i = 0; i < objects_.size(); i++) {
 		if (objects_[i].pos().x == pos.x and objects_[i].pos().y == pos.y) {
 			return i;
@@ -91,8 +91,8 @@ Warehouse::parseFromFile(const std::string& filePath) {
 	std::ifstream file(filePath);
 	std::string line;
 
-	uint32_t floorLineCount = 0;
-	uint32_t objectLineCount = 0;
+	size_t floorLineCount = 0;
+	size_t objectLineCount = 0;
 
 	uint32_t width = 0;
 	uint32_t height = 0;
@@ -119,7 +119,7 @@ Warehouse::parseFromFile(const std::string& filePath) {
 
 		} else if (id == 'f') {
 
-			for (uint32_t i = 0; i < line.size(); i++) {
+			for (size_t i = 0; i < line.size(); i++) {
 
 				auto floorType = charToFloor(line[i]);
 				
@@ -131,7 +131,7 @@ Warehouse::parseFromFile(const std::string& filePath) {
 
 		} else if (id == 'o') {
 
-			for (uint32_t i = 0; i < line.size(); i++) {
+			for (size_t i = 0; i < line.size(); i++) {
 				if (line[i] == '.') {
 					continue;
 				}
@@ -195,14 +195,14 @@ Warehouse::ensureUniquePlayer() const {
 
 // -------------------------------------------------------------------------------------------------
 
-uint32_t
+size_t
 Warehouse::nRows() const {
 	return floor_.nRows();
 }
 
 // -------------------------------------------------------------------------------------------------
 
-uint32_t
+size_t
 Warehouse::nCols() const {
 	return floor_.nCols();
 }
@@ -210,7 +210,7 @@ Warehouse::nCols() const {
 // -------------------------------------------------------------------------------------------------
 
 Floor
-Warehouse::getFloor(tiage::Position pos) const {
+Warehouse::getFloor(tiage::Vec2 pos) const {
 	return floor_.get(pos.y, pos.x);
 }
 
@@ -223,7 +223,7 @@ Warehouse::getObjects() const {
 
 // -------------------------------------------------------------------------------------------------
 
-const std::vector<tiage::Position>&
+const std::vector<tiage::Vec2>&
 Warehouse::getTargetPositions() const {
 	return targetPositions_;
 }

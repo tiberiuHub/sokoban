@@ -8,7 +8,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(TARGET ${PROJECT_NAME})
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../tiage" "tiage_lib")
+add_subdirectory("D:/work/tiage" "tiage_build")
 
 add_executable(${TARGET} 
     "${CMAKE_CURRENT_SOURCE_DIR}/Floor.cpp"
@@ -25,7 +25,7 @@ add_executable(${TARGET}
 # Include directories
 target_include_directories(${TARGET}       
     PRIVATE  
-        "${CMAKE_CURRENT_SOURCE_DIR}/../tiage/inc"   
+        "D:/work/tiage/inc"   
 )
 
 # Link the tiage library

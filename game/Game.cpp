@@ -86,10 +86,6 @@ Game::attemptPlayerMove(char key) {
     if (posIsInvalid(movePos) or currentWarehouse_.getFloor(movePos).type() == Floor::Type::Wall) {
         return;
     }
-    //std::cout << currentWarehouse_.isObjectAtPos(movePos);
-
-
-
 
     if (currentWarehouse_.isObjectAtPos(movePos)) {
 
@@ -99,7 +95,6 @@ Game::attemptPlayerMove(char key) {
         if (currentWarehouse_.getObjects()[objectIndex].type() == Object::Type::Box) {
 
             tiage::Vec2 nextMovePos = { currentWarehouse_.getObjects()[objectIndex].pos().x + dir.x, currentWarehouse_.getObjects()[objectIndex].pos().y + dir.y };
-
 
             if (posIsInvalid(nextMovePos) or
                 currentWarehouse_.isObjectAtPos(nextMovePos) or

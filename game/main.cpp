@@ -4,11 +4,14 @@
 #include "Game.h"
 
 int main() {
-    tiage::WinConsole renderer(3,3);
+    tiage::WinConsole renderer(5,5);
     sokoban::Game game(renderer);
     renderer.setCursorVisible(false);
-    game.loadLevel("C:/Users/oana/Desktop/debug.lvl");
+    //renderer.putChar(1, 1, tiage::Color::Green, 'A');
+    //renderer.flush();
+    game.loadLevel("C:/Users/oana/Desktop/1.lvl");
     game.runGame();
+   
     //std::cout << 111;
     //game.loadLevel("C:/Users/oana/Desktop/1.lvl");
     //game.runGame();

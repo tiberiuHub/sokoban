@@ -25,7 +25,7 @@ Game::Game(tiage::IConsole& renderer) :
 // -------------------------------------------------------------------------------------------------
 
 bool
-Game::posIsInvalid(tiage::Vec2 pos) const {
+Game::posIsInvalid(tiage::Vec2<uint32_t> pos) const {
 	return	(pos.x < 0 or pos.x >= currentWarehouse_.nCols()) or
 		(pos.y < 0 or pos.y >= currentWarehouse_.nRows());
 }
@@ -35,6 +35,9 @@ Game::posIsInvalid(tiage::Vec2 pos) const {
 void
 Game::runGame() {
 	gameRunning_ = true;
+
+	renderer_.create(currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
+
 	while (gameRunning_) {
 
 		renderCurrentWarehouse();
@@ -114,7 +117,7 @@ Game::attemptPlayerMove(char key) {
 
 // -------------------------------------------------------------------------------------------------
 
-tiage::Vec2
+tiage::Vec2<int>
 Game::dirFromKey(char key) {
 	if (key == 'w') {
 		return { -1,0 };
@@ -165,11 +168,9 @@ Game::renderCurrentWarehouse() const {
 	auto rows = currentWarehouse_.nRows();
 	auto cols = currentWarehouse_.nCols();
 
-	renderer_.create(currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
-
 	for (uint32_t row = 0; row < rows; row++) {
 		for (uint32_t col = 0; col < cols; col++) {
-			auto floor = currentWarehouse_.getFloor({ static_cast<int>(col), static_cast<int>(row) });
+			auto floor = currentWarehouse_.getFloor({ col,row });
 			renderer_.putChar(row * 2, col, floor.color(), floor.chr());
 		}
 	}

@@ -15,7 +15,7 @@ public:
 
 	Warehouse(uint32_t width, uint32_t height);
 
-	const std::vector<tiage::Vec2>& getDeliveryPositions() const;
+	const std::vector<tiage::Vec2<uint32_t>>& getDeliveryPositions() const;
 
 	int getPlayerIndex() const;
 
@@ -25,17 +25,17 @@ public:
 
 	void parseFromFile(const std::string& filePath);//within files f means floor and o means object d means dimension
 
-	Floor getFloor(tiage::Vec2 pos) const;
+	Floor getFloor(tiage::Vec2<uint32_t> pos) const;
 	
 	const std::vector<Object>& getObjects() const;
 
-	bool isObjectAtPos(tiage::Vec2 pos) const;
+	bool isObjectAtPos(tiage::Vec2<uint32_t> pos) const;
 
-	int getObjectAtPosIndex(tiage::Vec2 pos) const;
+	int getObjectAtPosIndex(tiage::Vec2<uint32_t> pos) const;
 
-	const std::vector<tiage::Vec2>& getTargetPositions() const;
+	const std::vector<tiage::Vec2<uint32_t>>& getTargetPositions() const;
 
-	void moveObject(size_t index, tiage::Vec2 newPos);
+	void moveObject(size_t index, tiage::Vec2<uint32_t> newPos);
 
 private:
 
@@ -51,7 +51,7 @@ private:
 
 	std::vector<Object> objects_;
 
-	std::vector<tiage::Vec2> targetPositions_;
+	std::vector<tiage::Vec2<uint32_t>> targetPositions_;
 
 };
 

@@ -13,13 +13,13 @@ public:
 
 	enum class Type { Box, Player };
 
-	Object(Type type, tiage::Vec2 pos);
+	Object(Type type, tiage::Vec2<uint32_t> pos);
 
-	void setPos(tiage::Vec2 pos);
+	void setPos(tiage::Vec2<uint32_t> pos);
 
 	Type type() const;
 
-	tiage::Vec2 pos() const;
+	tiage::Vec2<uint32_t> pos() const;
 
 	char asciiCode() const;
 
@@ -29,7 +29,7 @@ private:
 
 	Type type_;
 
-	tiage::Vec2 pos_;
+	tiage::Vec2<uint32_t> pos_;
 
 	char asciiCode_;
 	

@@ -8,7 +8,7 @@ namespace sokoban {
 
 // --------------------------------------------------------------------------------------------------
 
-Object::Object(Type type, tiage::Vec2 pos) :
+Object::Object(Type type, tiage::Vec2 <uint32_t> pos) :
 	type_(type),
 	pos_(pos) {
 	// the default look for a sokoban object
@@ -23,7 +23,7 @@ Object::Object(Type type, tiage::Vec2 pos) :
 // --------------------------------------------------------------------------------------------------
 
 void
-Object::setPos(tiage::Vec2 pos) {
+Object::setPos(tiage::Vec2 <uint32_t> pos) {
 	pos_ = pos;
 }
 
@@ -50,7 +50,7 @@ Object::type() const {
 
 // --------------------------------------------------------------------------------------------------
 
-tiage::Vec2
+tiage::Vec2 <uint32_t>
 Object::pos() const {
 	return pos_;
 }

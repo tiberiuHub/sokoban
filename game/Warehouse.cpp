@@ -18,50 +18,50 @@ Warehouse::Warehouse(uint32_t width, uint32_t height) : floor_(width, height) {}
 
 int
 Warehouse::getPlayerIndex() const {
-	for (size_t i = 0; i < objects_.size(); i++) {
-		if (objects_[i].type() == Object::Type::Player) {
-			return i;
-		}
-	}
-	throw std::runtime_error("Player not found in warehouse");
+    for (size_t i = 0; i < objects_.size(); i++) {
+        if (objects_[i].type() == Object::Type::Player) {
+            return i;
+        }
+    }
+    throw std::runtime_error("Player not found in warehouse");
 }
 
 // -------------------------------------------------------------------------------------------------
 
 const std::vector<tiage::Vec2<uint32_t>>&
 Warehouse::getDeliveryPositions() const {
-	return targetPositions_;
+    return targetPositions_;
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
 Warehouse::moveObject(size_t index, tiage::Vec2<uint32_t> newPos) {
-	objects_[index].setPos(newPos);
+    objects_[index].setPos(newPos);
 }
 
 // -------------------------------------------------------------------------------------------------
 
 bool
 Warehouse::isObjectAtPos(tiage::Vec2<uint32_t> pos) const {
-	for (size_t i = 0; i < objects_.size(); i++) {
-		if ((objects_[i].pos().x == pos.x) and (objects_[i].pos().y == pos.y)) {
-				return true;
-		}
-	}
-	return false;
+    for (size_t i = 0; i < objects_.size(); i++) {
+        if ((objects_[i].pos().x == pos.x) and (objects_[i].pos().y == pos.y)) {
+                return true;
+        }
+    }
+    return false;
 }
 
 // -------------------------------------------------------------------------------------------------
 
 int
 Warehouse::getObjectAtPosIndex(tiage::Vec2<uint32_t> pos) const {
-	for (size_t i = 0; i < objects_.size(); i++) {
-		if (objects_[i].pos().x == pos.x and objects_[i].pos().y == pos.y) {
-			return i;
-		}
-	}
-	throw std::runtime_error("you forgot to use isObjectAtPos to check if pos is valid first!");
+    for (size_t i = 0; i < objects_.size(); i++) {
+        if (objects_[i].pos().x == pos.x and objects_[i].pos().y == pos.y) {
+            return i;
+        }
+    }
+    throw std::runtime_error("you forgot to use isObjectAtPos to check if pos is valid first!");
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -69,15 +69,15 @@ Warehouse::getObjectAtPosIndex(tiage::Vec2<uint32_t> pos) const {
 void
 Warehouse::calculateDeliveryPositions() {
 
-	targetPositions_.clear();
+    targetPositions_.clear();
 
-	for (uint32_t i = 0; i < floor_.nRows(); i++) {
-		for (uint32_t j = 0; j < floor_.nCols(); j++) {
-			if (floor_.get(i, j).type() == Floor::Type::Storage) {
-				targetPositions_.push_back({ static_cast<uint32_t>(i),static_cast<uint32_t>(j) });
-			}
-		}
-	}
+    for (uint32_t i = 0; i < floor_.nRows(); i++) {
+        for (uint32_t j = 0; j < floor_.nCols(); j++) {
+            if (floor_.get(i, j).type() == Floor::Type::Storage) {
+                targetPositions_.push_back({ static_cast<uint32_t>(i),static_cast<uint32_t>(j) });
+            }
+        }
+    }
 
 }
 
@@ -86,69 +86,69 @@ Warehouse::calculateDeliveryPositions() {
 void
 Warehouse::parseFromFile(const std::string& filePath) {
 
-	objects_.clear();
+    objects_.clear();
 
-	std::ifstream file(filePath);
-	std::string line;
+    std::ifstream file(filePath);
+    std::string line;
 
-	size_t floorLineCount = 0;
-	size_t objectLineCount = 0;
+    size_t floorLineCount = 0;
+    size_t objectLineCount = 0;
 
-	uint32_t width = 0;
-	uint32_t height = 0;
+    uint32_t width = 0;
+    uint32_t height = 0;
 
-	if (!file.is_open()) {
-		throw std::runtime_error("Failed to open file: " + filePath);
-	}
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open file: " + filePath);
+    }
 
 
 
-	while (std::getline(file, line)) {
-		if (line.empty()) {
-			continue;
-		}
+    while (std::getline(file, line)) {
+        if (line.empty()) {
+            continue;
+        }
 
-		char id = line[0];
-		line = line.substr(1);
+        char id = line[0];
+        line = line.substr(1);
 
-		if (id == 'd') {
-			std::istringstream iss(line);
-			if (!(iss >> width >> height))
-				throw std::runtime_error("Invalid dimensions");
-			floor_ = tiage::Matrix<Floor>(height, width);
+        if (id == 'd') {
+            std::istringstream iss(line);
+            if (!(iss >> width >> height))
+                throw std::runtime_error("Invalid dimensions");
+            floor_ = tiage::Matrix<Floor>(height, width);
 
-		} else if (id == 'f') {
+        } else if (id == 'f') {
 
-			for (size_t i = 0; i < line.size(); i++) {
+            for (size_t i = 0; i < line.size(); i++) {
 
-				auto floorType = charToFloor(line[i]);
-				
-				floor_.set(i, floorLineCount, Floor(floorType));
+                auto floorType = charToFloor(line[i]);
+                
+                floor_.set(i, floorLineCount, Floor(floorType));
 
-			}
+            }
 
-			floorLineCount++;
+            floorLineCount++;
 
-		} else if (id == 'o') {
+        } else if (id == 'o') {
 
-			for (size_t i = 0; i < line.size(); i++) {
-				if (line[i] == '.') {
-					continue;
-				}
-				auto objectType = charToObject(line[i]);
-				objects_.emplace_back(Object( objectType, { static_cast<uint32_t>(objectLineCount),static_cast<uint32_t>(i) }));
-			}
+            for (size_t i = 0; i < line.size(); i++) {
+                if (line[i] == '.') {
+                    continue;
+                }
+                auto objectType = charToObject(line[i]);
+                objects_.emplace_back(Object( objectType, { static_cast<uint32_t>(objectLineCount),static_cast<uint32_t>(i) }));
+            }
 
-			objectLineCount++;
+            objectLineCount++;
 
-		}
-	}
+        }
+    }
 
-	ensureUniquePlayer();
+    ensureUniquePlayer();
 
-	if (floorLineCount != objectLineCount) {
-		throw std::runtime_error("file written wrong");
-	}
+    if (floorLineCount != objectLineCount) {
+        throw std::runtime_error("file written wrong");
+    }
 
 }
 
@@ -156,75 +156,75 @@ Warehouse::parseFromFile(const std::string& filePath) {
 
 Floor::Type
 Warehouse::charToFloor(char c) {
-	switch (c) {
-	case '#': return Floor::Type::Wall;
-	case '.': return Floor::Type::Empty;
-	case 'x': return Floor::Type::Storage;
-	default: throw std::runtime_error(std::string("Unknown floor char: ") + c);
-	}
+    switch (c) {
+    case '#': return Floor::Type::Wall;
+    case '.': return Floor::Type::Empty;
+    case 'x': return Floor::Type::Storage;
+    default: throw std::runtime_error(std::string("Unknown floor char: ") + c);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------
 
 Object::Type
 Warehouse::charToObject(char c) {
-	switch (c) {
-	case '@': return Object::Type::Player;
-	case 'b': return Object::Type::Box;
-	default: throw std::runtime_error(std::string("Unknown object char: ") + c);
-	}
+    switch (c) {
+    case '@': return Object::Type::Player;
+    case 'b': return Object::Type::Box;
+    default: throw std::runtime_error(std::string("Unknown object char: ") + c);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
 Warehouse::ensureUniquePlayer() const {
-	uint32_t count = 0;
+    uint32_t count = 0;
 
-	for (const auto& object : objects_) {
-		if (object.type() == Object::Type::Player) {
-			count++;
-		}
-	}
+    for (const auto& object : objects_) {
+        if (object.type() == Object::Type::Player) {
+            count++;
+        }
+    }
 
-	if (count == 0 or count > 1) {
-		throw std::runtime_error("invalid player amount");
-	}
+    if (count == 0 or count > 1) {
+        throw std::runtime_error("invalid player amount");
+    }
 }
 
 // -------------------------------------------------------------------------------------------------
 
 size_t
 Warehouse::nRows() const {
-	return floor_.nRows();
+    return floor_.nRows();
 }
 
 // -------------------------------------------------------------------------------------------------
 
 size_t
 Warehouse::nCols() const {
-	return floor_.nCols();
+    return floor_.nCols();
 }
 
 // -------------------------------------------------------------------------------------------------
 
 Floor
 Warehouse::getFloor(tiage::Vec2<uint32_t> pos) const {
-	return floor_.get(pos.y, pos.x);
+    return floor_.get(pos.y, pos.x);
 }
 
 // -------------------------------------------------------------------------------------------------
 
 const std::vector<Object>&
 Warehouse::getObjects() const {
-	return objects_;
+    return objects_;
 }
 
 // -------------------------------------------------------------------------------------------------
 
 const std::vector<tiage::Vec2<uint32_t>>&
 Warehouse::getTargetPositions() const {
-	return targetPositions_;
+    return targetPositions_;
 }
 
 // -------------------------------------------------------------------------------------------------

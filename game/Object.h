@@ -11,29 +11,29 @@ namespace sokoban {
 class Object {
 public:
 
-	enum class Type { Box, Player };
+    enum class Type { Box, Player };
 
-	Object(Type type, tiage::Vec2<uint32_t> pos);
+    Object(Type type, tiage::Vec2<uint32_t> pos);
 
-	void setPos(tiage::Vec2<uint32_t> pos);
+    void setPos(tiage::Vec2<uint32_t> pos);
 
-	Type type() const;
+    Type type() const;
 
-	tiage::Vec2<uint32_t> pos() const;
+    tiage::Vec2<uint32_t> pos() const;
 
-	char asciiCode() const;
+    char asciiCode() const;
 
-	tiage::Color color() const;
+    tiage::Color color() const;
 
 private:
 
-	Type type_;
+    Type type_;
 
-	tiage::Vec2<uint32_t> pos_;
+    tiage::Vec2<uint32_t> pos_;
 
-	char asciiCode_;
-	
-	tiage::Color color_;
+    char asciiCode_;
+    
+    tiage::Color color_;
 };
 
 } // sokoban

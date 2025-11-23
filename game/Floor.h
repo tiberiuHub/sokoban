@@ -10,25 +10,25 @@ namespace sokoban {
 class Floor {
 public:
 
-	enum class Type { Empty, Wall, Storage };
+    enum class Type { Empty, Wall, Storage };
 
-	Floor(Type type);
+    Floor(Type type);
 
-	Floor();
+    Floor();
 
-	Type type() const;
+    Type type() const;
 
-	tiage::Color color() const;
+    tiage::Color color() const;
 
-	char chr() const;
+    char chr() const;
 
 private:
 
-	char asciiCode_;
+    char asciiCode_;
 
-	tiage::Color color_;
+    tiage::Color color_;
 
-	Type type_;
+    Type type_;
 };
 
 } // sokoban

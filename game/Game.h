@@ -11,35 +11,35 @@ namespace sokoban {
 class Game {
 public:
 
-	Game(Warehouse warehouse, tiage::IConsole& renderer);
+    Game(Warehouse warehouse, tiage::IConsole& renderer);
 
-	Game(tiage::IConsole& renderer);
+    Game(tiage::IConsole& renderer);
 
-	void runGame();
+    void runGame();
 
-	void loadLevel(const std::string& filePath);
+    void loadLevel(const std::string& filePath);
 
 private:
 
-	bool objectIsCrateOnDelivery(const Object& obj) const;
+    bool objectIsCrateOnDelivery(const Object& obj) const;
 
-	bool posIsInvalid(tiage::Vec2<uint32_t> Pos) const;
+    bool posIsInvalid(tiage::Vec2<uint32_t> Pos) const;
 
-	tiage::Vec2<int> dirFromKey(char key);
+    tiage::Vec2<int> dirFromKey(char key);
 
-	void attemptPlayerMove(char key);
+    void attemptPlayerMove(char key);
 
-	bool checkVictory();
+    bool checkVictory();
 
-	void handleInput(char key);
+    void handleInput(char key);
 
-	void renderCurrentWarehouse() const;
+    void renderCurrentWarehouse() const;
 
-	Warehouse currentWarehouse_;
+    Warehouse currentWarehouse_;
 
-	tiage::IConsole& renderer_;
+    tiage::IConsole& renderer_;
 
-	bool gameRunning_ = false;
+    bool gameRunning_ = false;
 
 };
 

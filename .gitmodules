@@ -1,3 +1,5 @@
 [submodule "tiage"]
 	path = tiage
 	url = https://github.com/tiberiuHub/tiage.git
+	branch = main
+	

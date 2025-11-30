@@ -28,7 +28,7 @@ Warehouse::getPlayerIndex() const {
 
 // -------------------------------------------------------------------------------------------------
 
-const std::vector<tiage::Vec2<uint32_t>>&
+const std::vector<tiage::V2i32>&
 Warehouse::getDeliveryPositions() const {
     return targetPositions_;
 }
@@ -36,16 +36,16 @@ Warehouse::getDeliveryPositions() const {
 // -------------------------------------------------------------------------------------------------
 
 void
-Warehouse::moveObject(size_t index, tiage::Vec2<uint32_t> newPos) {
+Warehouse::moveObject(size_t index, tiage::V2i32 newPos) {
     objects_[index].setPos(newPos);
 }
 
 // -------------------------------------------------------------------------------------------------
 
 bool
-Warehouse::isObjectAtPos(tiage::Vec2<uint32_t> pos) const {
+Warehouse::isObjectAtPos(tiage::V2i32 pos) const {
     for (size_t i = 0; i < objects_.size(); i++) {
-        if ((objects_[i].pos().x == pos.x) and (objects_[i].pos().y == pos.y)) {
+        if (objects_[i].pos() == pos) {
                 return true;
         }
     }
@@ -55,9 +55,9 @@ Warehouse::isObjectAtPos(tiage::Vec2<uint32_t> pos) const {
 // -------------------------------------------------------------------------------------------------
 
 int
-Warehouse::getObjectAtPosIndex(tiage::Vec2<uint32_t> pos) const {
+Warehouse::getObjectAtPosIndex(tiage::V2i32 pos) const {
     for (size_t i = 0; i < objects_.size(); i++) {
-        if (objects_[i].pos().x == pos.x and objects_[i].pos().y == pos.y) {
+        if (objects_[i].pos() == pos) {
             return i;
         }
     }
@@ -71,10 +71,10 @@ Warehouse::calculateDeliveryPositions() {
 
     targetPositions_.clear();
 
-    for (uint32_t i = 0; i < floor_.nRows(); i++) {
-        for (uint32_t j = 0; j < floor_.nCols(); j++) {
+    for (int32_t i = 0; i < floor_.nRows(); i++) {
+        for (int32_t j = 0; j < floor_.nCols(); j++) {
             if (floor_.get(i, j).type() == Floor::Type::Storage) {
-                targetPositions_.push_back({ static_cast<uint32_t>(i),static_cast<uint32_t>(j) });
+                targetPositions_.push_back({ i, j });
             }
         }
     }
@@ -91,8 +91,8 @@ Warehouse::parseFromFile(const std::string& filePath) {
     std::ifstream file(filePath);
     std::string line;
 
-    size_t floorLineCount = 0;
-    size_t objectLineCount = 0;
+    int32_t floorLineCount = 0;
+    int32_t objectLineCount = 0;
 
     uint32_t width = 0;
     uint32_t height = 0;
@@ -131,12 +131,12 @@ Warehouse::parseFromFile(const std::string& filePath) {
 
         } else if (id == 'o') {
 
-            for (size_t i = 0; i < line.size(); i++) {
+            for (int32_t i = 0; i < line.size(); i++) {
                 if (line[i] == '.') {
                     continue;
                 }
                 auto objectType = charToObject(line[i]);
-                objects_.emplace_back(Object( objectType, { static_cast<uint32_t>(objectLineCount),static_cast<uint32_t>(i) }));
+                objects_.emplace_back(Object( objectType, { objectLineCount, i }));
             }
 
             objectLineCount++;
@@ -209,8 +209,8 @@ Warehouse::nCols() const {
 // -------------------------------------------------------------------------------------------------
 
 Floor
-Warehouse::getFloor(tiage::Vec2<uint32_t> pos) const {
-    return floor_.get(pos.y, pos.x);
+Warehouse::getFloor(tiage::V2i32 pos) const {
+    return floor_.get(pos.y(), pos.x());
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -222,7 +222,7 @@ Warehouse::getObjects() const {
 
 // -------------------------------------------------------------------------------------------------
 
-const std::vector<tiage::Vec2<uint32_t>>&
+const std::vector<tiage::V2i32>&
 Warehouse::getTargetPositions() const {
     return targetPositions_;
 }

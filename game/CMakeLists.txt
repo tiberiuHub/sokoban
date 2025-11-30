@@ -28,5 +28,9 @@ target_include_directories(${TARGET}
         "${CMAKE_CURRENT_SOURCE_DIR}/../tiage/inc"   
 )
 
+if (WIN32)
+    target_link_options(${TARGET} PRIVATE "/SUBSYSTEM:WINDOWS")
+endif()
+
 # Link the tiage library
 target_link_libraries(${TARGET} PRIVATE tiage)

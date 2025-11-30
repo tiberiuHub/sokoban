@@ -25,9 +25,9 @@ Game::Game(tiage::IConsole& renderer) :
 // -------------------------------------------------------------------------------------------------
 
 bool
-Game::posIsInvalid(tiage::Vec2<uint32_t> pos) const {
-    return    (pos.x < 0 or pos.x >= currentWarehouse_.nCols()) or
-        (pos.y < 0 or pos.y >= currentWarehouse_.nRows());
+Game::posIsInvalid(tiage::V2i32 pos) const {
+    return    (pos.x() < 0 or pos.x() >= currentWarehouse_.nCols()) or
+        (pos.y() < 0 or pos.y() >= currentWarehouse_.nRows());
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -35,8 +35,8 @@ Game::posIsInvalid(tiage::Vec2<uint32_t> pos) const {
 void
 Game::runGame() {
     gameRunning_ = true;
-
-    renderer_.create(currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
+    
+    //renderer_.create(currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
 
     while (gameRunning_) {
 
@@ -53,8 +53,10 @@ Game::runGame() {
         }
 
         Sleep(50);
-    }
 
+      /*  renderer_.move(tiage::V2i32{ rand() % 100, rand() % 100 },
+                       tiage::V2i32{ 100, 100 });*/
+    }
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -73,7 +75,7 @@ Game::attemptPlayerMove(char key) {
 
     auto dir = dirFromKey(key);
 
-    if (dir.x == 0 and dir.y == 0) {
+    if (dir.x() == 0 and dir.y() == 0) {
         return;
     }
 
@@ -81,7 +83,7 @@ Game::attemptPlayerMove(char key) {
 
     auto playerPos = currentWarehouse_.getObjects()[playerIndex].pos();
 
-    tiage::Vec2 movePos = { playerPos.x + dir.x, playerPos.y + dir.y };
+    auto movePos = playerPos + dir;
 
     if (posIsInvalid(movePos) or currentWarehouse_.getFloor(movePos).type() == Floor::Type::Wall) {
         return;
@@ -94,7 +96,8 @@ Game::attemptPlayerMove(char key) {
 
         if (currentWarehouse_.getObjects()[objectIndex].type() == Object::Type::Box) {
 
-            tiage::Vec2 nextMovePos = { currentWarehouse_.getObjects()[objectIndex].pos().x + dir.x, currentWarehouse_.getObjects()[objectIndex].pos().y + dir.y };
+            tiage::Vec2 nextMovePos =
+                currentWarehouse_.getObjects()[objectIndex].pos() + dir;
 
             if (posIsInvalid(nextMovePos) or
                 currentWarehouse_.isObjectAtPos(nextMovePos) or
@@ -115,13 +118,13 @@ Game::attemptPlayerMove(char key) {
 tiage::Vec2<int>
 Game::dirFromKey(char key) {
     if (key == 'w') {
-        return { -1,0 };
+        return { -1, 0 };
     } else if (key == 's') {
-        return { 1,0 };
+        return { 1, 0 };
     } else if (key == 'a') {
-        return { 0,-1 };
+        return { 0, -1 };
     } else if (key == 'd') {
-        return { 0,1 };
+        return { 0, 1 };
     } else {
         //unreacheable
         throw std::runtime_error("impossible error");
@@ -159,25 +162,22 @@ Game::objectIsCrateOnDelivery(const Object& obj) const {
 
 void
 Game::renderCurrentWarehouse() const {
-
     auto rows = currentWarehouse_.nRows();
     auto cols = currentWarehouse_.nCols();
 
-    for (uint32_t row = 0; row < rows; row++) {
-        for (uint32_t col = 0; col < cols; col++) {
-            auto floor = currentWarehouse_.getFloor({ col,row });
+    for (int32_t row = 0; row < rows; row++) {
+        for (int32_t col = 0; col < cols; col++) {
+            auto floor = currentWarehouse_.getFloor({ col, row });
             renderer_.putChar(row * 2, col, floor.color(), floor.chr());
         }
     }
 
     for (auto& object : currentWarehouse_.getObjects()) {
         if (objectIsCrateOnDelivery(object)) {
-            renderer_.putChar(object.pos().y * 2, object.pos().x, tiage::Color::Green, object.asciiCode());
+            renderer_.putChar(2 * object.pos().y(), object.pos().x(), tiage::Color::Green, object.asciiCode());
         } else {
-            renderer_.putChar(object.pos().y * 2, object.pos().x, object.color(), object.asciiCode());
+            renderer_.putChar(2 * object.pos().y(), object.pos().x(), object.color(), object.asciiCode());
         }
-
-
     }
 
     renderer_.flush();

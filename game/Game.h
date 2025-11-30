@@ -23,7 +23,7 @@ private:
 
     bool objectIsCrateOnDelivery(const Object& obj) const;
 
-    bool posIsInvalid(tiage::Vec2<uint32_t> Pos) const;
+    bool posIsInvalid(tiage::V2i32 pos) const;
 
     tiage::Vec2<int> dirFromKey(char key);
 

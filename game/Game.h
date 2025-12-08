@@ -37,7 +37,7 @@ private:
 
     Warehouse currentWarehouse_;
 
-    tiage::IConsole& renderer_;
+    tiage::IConsole& console_;
 
     bool gameRunning_ = false;
 

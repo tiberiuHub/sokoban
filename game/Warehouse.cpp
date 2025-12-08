@@ -144,6 +144,7 @@ Warehouse::parseFromFile(const std::string& filePath) {
         }
     }
 
+
     ensureUniquePlayer();
 
     if (floorLineCount != objectLineCount) {

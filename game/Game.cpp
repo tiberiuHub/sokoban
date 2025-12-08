@@ -12,14 +12,14 @@ namespace sokoban {
 
 Game::Game(Warehouse warehouse, tiage::IConsole& renderer):
     currentWarehouse_(std::move(warehouse)),
-    renderer_(renderer) {
+    console_(renderer) {
 }
 
 // -------------------------------------------------------------------------------------------------
 
 Game::Game(tiage::IConsole& renderer) :
     currentWarehouse_(Warehouse(5, 5)),
-    renderer_(renderer) {
+    console_(renderer) {
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ void
 Game::runGame() {
     gameRunning_ = true;
     
-    //renderer_.create(currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
+    //console_.create(currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
 
     while (gameRunning_) {
 
@@ -54,7 +54,7 @@ Game::runGame() {
 
         Sleep(50);
 
-      /*  renderer_.move(tiage::V2i32{ rand() % 100, rand() % 100 },
+      /*  console_.move(tiage::V2i32{ rand() % 100, rand() % 100 },
                        tiage::V2i32{ 100, 100 });*/
     }
 }
@@ -168,19 +168,21 @@ Game::renderCurrentWarehouse() const {
     for (int32_t row = 0; row < rows; row++) {
         for (int32_t col = 0; col < cols; col++) {
             auto floor = currentWarehouse_.getFloor({ col, row });
-            renderer_.putChar(row * 2, col, floor.color(), floor.chr());
+            console_.putChar(row * 2, col, floor.color(), floor.chr());
         }
     }
+
+    console_.move(std::nullopt, tiage::V2i32{ static_cast<int>(rows) * 2 - 1, static_cast<int>(cols) });
 
     for (auto& object : currentWarehouse_.getObjects()) {
         if (objectIsCrateOnDelivery(object)) {
-            renderer_.putChar(2 * object.pos().y(), object.pos().x(), tiage::Color::Green, object.asciiCode());
+            console_.putChar(2 * object.pos().y(), object.pos().x(), tiage::Color::Green, object.asciiCode());
         } else {
-            renderer_.putChar(2 * object.pos().y(), object.pos().x(), object.color(), object.asciiCode());
+            console_.putChar(2 * object.pos().y(), object.pos().x(), object.color(), object.asciiCode());
         }
     }
 
-    renderer_.flush();
+    console_.flush();
 }
 
 // -------------------------------------------------------------------------------------------------

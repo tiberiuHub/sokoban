@@ -20,39 +20,22 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdS
 
     cc.setCursorVisible(false);
 
-    cc.move(tiage::V2i32{ 500, 500 }, tiage::V2i32{ 29, 15 });
+    cc.move(tiage::V2i32{ 500, 500 }, tiage::V2i32{ 19, 10 });
 
-    
 
-//    printf("ad");
-
-    //for (int j = 0; j < 50; j++) {
-    //    for (int i = 0; i < 50; i++) {
-    //        printf("a");
-    //    }        
-    //    if (j < 49) {
-    //        //SetConsoleCursorPosition()
-    //    }
-    //    //printf("%d\n", j);
-    //}
-    //printf("b");
-  
-    
-  //  Sleep(10000);
-
-    //return 0;
-    
-   
 
     tiage::WinFileSystem fileSys;
-    //std::string answer = fileSys.pickFile("lvl");
+    std::string answer = fileSys.pickFile("lvl");
     //std::string answer2 = fileSys.pickFolder();
-    tiage::WinConsole console;//(5, 5);
     sokoban::Game game(cc);
     cc.setCursorVisible(false);
-    //game.loadLevel(answer);
-    //game.runGame();
-    std::cout << console.getHostProcess();
+    game.loadLevel(answer);
+    game.runGame();
+
+
+
+    /*
+     std::cout << console.getHostProcess();
     int screenW = 1920;
     int screenH = 1080;
     int centerX = screenW / 2;
@@ -81,5 +64,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdS
 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+    
+    */
+   
     return 0;
 }

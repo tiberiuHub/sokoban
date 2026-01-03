@@ -10,11 +10,12 @@ namespace sokoban {
 
 Object::Object(Type type, tiage::V2i32 pos) :
     type_(type),
-    pos_(pos) {
+    pos_(pos) 
+{
     // the default look for a sokoban object
     static const std::unordered_map<Type, std::pair<char, tiage::Color>> defaults = {
-        { Type::Player , { '@', tiage::Color::Red } },
-        { Type::Box, { '#', tiage::Color::Brown} },
+        { Type::Player , { '@', tiage::Color::kRed } },
+        { Type::Box, { '#', tiage::Color::kTan} },
     };
     asciiCode_ = defaults.at(type).first;
     color_ = defaults.at(type).second;

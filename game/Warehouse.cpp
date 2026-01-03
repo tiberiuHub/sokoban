@@ -113,8 +113,10 @@ Warehouse::parseFromFile(const std::string& filePath) {
 
         if (id == 'd') {
             std::istringstream iss(line);
-            if (!(iss >> width >> height))
-                throw std::runtime_error("Invalid dimensions");
+            if (!(iss >> width >> height)) {
+                throw std::runtime_error("Invalid dimensions provided in file");
+            }
+                
             floor_ = tiage::Matrix<Floor>(height, width);
 
         } else if (id == 'f') {
@@ -148,7 +150,7 @@ Warehouse::parseFromFile(const std::string& filePath) {
     ensureUniquePlayer();
 
     if (floorLineCount != objectLineCount) {
-        throw std::runtime_error("file written wrong");
+        throw std::runtime_error("File could not be parsed , obj line count needs to be equal to floor line count");
     }
 
 }
@@ -188,7 +190,7 @@ Warehouse::ensureUniquePlayer() const {
         }
     }
 
-    if (count == 0 or count > 1) {
+    if (count == 0 || count > 1) {
         throw std::runtime_error("invalid player amount");
     }
 }

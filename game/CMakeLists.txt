@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.18.0)
-include_guard(GLOBAL)
 project(sokoban)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -8,9 +7,10 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(TARGET ${PROJECT_NAME})
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../tiage" "tiage_build")
+set(TIAGE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../tiage")
+add_subdirectory(${TIAGE_DIR} "${CMAKE_CURRENT_BINARY_DIR}/tiage_build")
 
-add_executable(${TARGET} 
+add_executable(${TARGET}
     "${CMAKE_CURRENT_SOURCE_DIR}/Floor.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Floor.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Game.cpp"
@@ -22,15 +22,11 @@ add_executable(${TARGET}
     "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
 )
 
-# Include directories
+# Include tiage headers
 target_include_directories(${TARGET}       
     PRIVATE  
-        "${CMAKE_CURRENT_SOURCE_DIR}/../tiage/inc"   
+        "${TIAGE_DIR}/inc"   
 )
-
-if (WIN32)
-    target_link_options(${TARGET} PRIVATE "/SUBSYSTEM:WINDOWS")
-endif()
 
 # Link the tiage library
 target_link_libraries(${TARGET} PRIVATE tiage)

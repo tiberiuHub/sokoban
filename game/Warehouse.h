@@ -23,7 +23,7 @@ public:
 
     size_t nCols() const;
 
-    void parseFromFile(const std::string& filePath);//within files f means floor and o means object d means dimension
+    void parseFromFile(const std::string& filePath);//within files f means floor and o means object d means dimensions
 
     Floor getFloor(tiage::V2i32 pos) const;
     

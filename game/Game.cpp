@@ -26,8 +26,8 @@ Game::Game(tiage::IConsole& renderer) :
 
 bool
 Game::posIsInvalid(tiage::V2i32 pos) const {
-    return    (pos.x() < 0 or pos.x() >= currentWarehouse_.nCols()) or
-        (pos.y() < 0 or pos.y() >= currentWarehouse_.nRows());
+    return    (pos.x() < 0 || pos.x() >= currentWarehouse_.nCols()) ||
+        (pos.y() < 0 || pos.y() >= currentWarehouse_.nRows());
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -35,8 +35,6 @@ Game::posIsInvalid(tiage::V2i32 pos) const {
 void
 Game::runGame() {
     gameRunning_ = true;
-    
-    //console_.create(currentWarehouse_.nCols(), currentWarehouse_.nRows() * 2 - 1);
 
     while (gameRunning_) {
 
@@ -54,8 +52,6 @@ Game::runGame() {
 
         Sleep(50);
 
-      /*  console_.move(tiage::V2i32{ rand() % 100, rand() % 100 },
-                       tiage::V2i32{ 100, 100 });*/
     }
 }
 
@@ -63,8 +59,10 @@ Game::runGame() {
 
 void
 Game::handleInput(char key) {
-    if (key == 'w' or key == 'a' or key == 's' or key == 'd') {
+    if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
         attemptPlayerMove(key);
+    } else if (key == 'r') {
+        undoLastMove();
     }
 }
 
@@ -75,7 +73,7 @@ Game::attemptPlayerMove(char key) {
 
     auto dir = dirFromKey(key);
 
-    if (dir.x() == 0 and dir.y() == 0) {
+    if (dir.x() == 0 && dir.y() == 0) {
         return;
     }
 
@@ -85,9 +83,11 @@ Game::attemptPlayerMove(char key) {
 
     auto movePos = playerPos + dir;
 
-    if (posIsInvalid(movePos) or currentWarehouse_.getFloor(movePos).type() == Floor::Type::Wall) {
+    if (posIsInvalid(movePos) || currentWarehouse_.getFloor(movePos).type() == Floor::Type::Wall) {
         return;
     }
+
+    std::vector<Move> movesThisTurn;
 
     if (currentWarehouse_.isObjectAtPos(movePos)) {
 
@@ -96,21 +96,38 @@ Game::attemptPlayerMove(char key) {
 
         if (currentWarehouse_.getObjects()[objectIndex].type() == Object::Type::Box) {
 
-            tiage::Vec2 nextMovePos =
-                currentWarehouse_.getObjects()[objectIndex].pos() + dir;
+            tiage::Vec2 nextMovePos = currentWarehouse_.getObjects()[objectIndex].pos() + dir;
 
-            if (posIsInvalid(nextMovePos) or
-                currentWarehouse_.isObjectAtPos(nextMovePos) or
+            if (posIsInvalid(nextMovePos) ||
+                currentWarehouse_.isObjectAtPos(nextMovePos) || 
                 currentWarehouse_.getFloor(nextMovePos).type() == Floor::Type::Wall) {
                 return;
             }
 
             currentWarehouse_.moveObject(objectIndex, nextMovePos);
 
+            movesThisTurn.push_back({ movePos, nextMovePos });
         }
     }
     currentWarehouse_.moveObject(playerIndex, movePos);
 
+    movesThisTurn.push_back({ playerPos,movePos });
+    movesMade_.push(movesThisTurn);
+}
+
+// -------------------------------------------------------------------------------------------------
+
+void
+Game::undoLastMove() {
+    if (movesMade_.empty()) { 
+        return; 
+    }
+    auto lastMove = movesMade_.top();
+    movesMade_.pop();
+    for (auto move : lastMove) {
+        auto objectIndex = currentWarehouse_.getObjectAtPosIndex(move.to);
+        currentWarehouse_.moveObject(objectIndex, move.from);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -136,7 +153,7 @@ Game::dirFromKey(char key) {
 bool
 Game::checkVictory() {
     for (auto& object : currentWarehouse_.getObjects()) {
-        if (object.type() == Object::Type::Box and !objectIsCrateOnDelivery(object)) {
+        if (object.type() == Object::Type::Box && !objectIsCrateOnDelivery(object)) {
             return false;
         }
     }
@@ -155,7 +172,7 @@ Game::loadLevel(const std::string& filePath) {
 
 bool
 Game::objectIsCrateOnDelivery(const Object& obj) const {
-    return obj.type() == Object::Type::Box and currentWarehouse_.getFloor(obj.pos()).type() == Floor::Type::Storage;
+    return obj.type() == Object::Type::Box && currentWarehouse_.getFloor(obj.pos()).type() == Floor::Type::Storage;
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -168,7 +185,7 @@ Game::renderCurrentWarehouse() const {
     for (int32_t row = 0; row < rows; row++) {
         for (int32_t col = 0; col < cols; col++) {
             auto floor = currentWarehouse_.getFloor({ col, row });
-            console_.putChar(row * 2, col, floor.color(), floor.chr());
+            console_.putChar(row * 2, col, {  floor.chr(),floor.color(),floor.color(), });
         }
     }
 
@@ -176,9 +193,9 @@ Game::renderCurrentWarehouse() const {
 
     for (auto& object : currentWarehouse_.getObjects()) {
         if (objectIsCrateOnDelivery(object)) {
-            console_.putChar(2 * object.pos().y(), object.pos().x(), tiage::Color::Green, object.asciiCode());
+            console_.putChar(2 * object.pos().y(), object.pos().x(), {  object.asciiCode(), tiage::Color::kGreen, tiage::Color::kGreen });
         } else {
-            console_.putChar(2 * object.pos().y(), object.pos().x(), object.color(), object.asciiCode());
+            console_.putChar(2 * object.pos().y(), object.pos().x(), {  object.asciiCode(), object.color(), object.color() });
         }
     }
 

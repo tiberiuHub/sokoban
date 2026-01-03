@@ -10,62 +10,25 @@
 #include "Game.h"
 #include <iostream>
 
-
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-
-    tiage::WinConsole cc;
-
-    cc.create(tiage::WinConsole::kDefaultCreateOptions | tiage::WinConsole::kWinDefaultCreateOptions);
-
-    cc.setCursorVisible(false);
-
-    cc.move(tiage::V2i32{ 500, 500 }, tiage::V2i32{ 19, 10 });
-
-
-
-    tiage::WinFileSystem fileSys;
-    std::string answer = fileSys.pickFile("lvl");
-    //std::string answer2 = fileSys.pickFolder();
-    sokoban::Game game(cc);
-    cc.setCursorVisible(false);
-    game.loadLevel(answer);
-    game.runGame();
-
-
-
-    /*
-     std::cout << console.getHostProcess();
-    int screenW = 1920;
-    int screenH = 1080;
-    int centerX = screenW / 2;
-    int centerY = screenH / 2;
-
-    double angle = 0.0;
-    double angularSpeed = 1.0;
-    double radius = 200.0;
-
-    auto lastTime = std::chrono::high_resolution_clock::now();
-    HWND hwndConsole = GetConsoleWindow();
-    DWORD consolePid = 0;
     
-    while (true) {
-        auto now = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> dt = now - lastTime;
-        lastTime = now;
+   tiage::WinConsole skbConsole;
+   tiage::WinFileSystem fileSys;
 
-        angle += angularSpeed * dt.count();
+    skbConsole.create(tiage::WinConsole::kWinDefaultCreateOptions |tiage::WinConsole::kDefaultCreateOptions );
 
-        int x = static_cast<int>(centerX + radius * std::cos(angle));
-        int y = static_cast<int>(centerY + radius * std::sin(angle));
+   skbConsole.setCursorVisible(false);
 
-        tiage::V2i32 pos(x, y);
-        console.move(pos, std::nullopt);
+   skbConsole.move(tiage::V2i32{ 500, 500 }, tiage::V2i32{ 50,50 });
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-    
-    */
-   
+   skbConsole.setTitle("Sokoban");
+
+   std::string answer = fileSys.pickFile("lvl");
+   sokoban::Game game(skbConsole);
+
+   game.loadLevel(answer);
+   game.runGame();
+
     return 0;
 }

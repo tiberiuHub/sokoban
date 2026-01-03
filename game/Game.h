@@ -5,6 +5,7 @@
 #include <tiage/IConsole.h>
 #include "Warehouse.h"
 #include <Windows.h>
+#include <stack>
 
 namespace sokoban {
 
@@ -21,6 +22,11 @@ public:
 
 private:
 
+    struct Move {
+        tiage::V2i32 from;
+        tiage::V2i32 to;
+    };
+
     bool objectIsCrateOnDelivery(const Object& obj) const;
 
     bool posIsInvalid(tiage::V2i32 pos) const;
@@ -28,6 +34,8 @@ private:
     tiage::Vec2<int> dirFromKey(char key);
 
     void attemptPlayerMove(char key);
+
+    void undoLastMove();
 
     bool checkVictory();
 
@@ -40,6 +48,8 @@ private:
     tiage::IConsole& console_;
 
     bool gameRunning_ = false;
+
+    std::stack<std::vector<Move>> movesMade_;
 
 };
 

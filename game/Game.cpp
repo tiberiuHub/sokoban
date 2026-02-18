@@ -68,50 +68,53 @@ Game::handleInput(char key) {
 
 // -------------------------------------------------------------------------------------------------
 
-void
-Game::attemptPlayerMove(char key) {
-
+void Game::attemptPlayerMove(char key) {
     auto dir = dirFromKey(key);
 
-    if (dir.x() == 0 && dir.y() == 0) {
+    if (dir.x() == 0 && dir.y() == 0)
         return;
-    }
 
     auto playerIndex = currentWarehouse_.getPlayerIndex();
-
     auto playerPos = currentWarehouse_.getObjects()[playerIndex].pos();
-
     auto movePos = playerPos + dir;
 
-    if (posIsInvalid(movePos) || currentWarehouse_.getFloor(movePos).type() == Floor::Type::Wall) {
+    // Check player move validity
+    if (posIsInvalid(movePos) ||
+        currentWarehouse_.getFloor({
+            static_cast<size_t>(movePos.x()),
+            static_cast<size_t>(movePos.y())
+            }).type() == Floor::Type::Wall) {
         return;
     }
 
     std::vector<Move> movesThisTurn;
 
+    // If something is in front of player
     if (currentWarehouse_.isObjectAtPos(movePos)) {
-
-
         auto objectIndex = currentWarehouse_.getObjectAtPosIndex(movePos);
 
         if (currentWarehouse_.getObjects()[objectIndex].type() == Object::Type::Box) {
+            auto nextMovePos =
+                currentWarehouse_.getObjects()[objectIndex].pos() + dir;
 
-            tiage::Vec2 nextMovePos = currentWarehouse_.getObjects()[objectIndex].pos() + dir;
-
+            // Check box move validity
             if (posIsInvalid(nextMovePos) ||
-                currentWarehouse_.isObjectAtPos(nextMovePos) || 
-                currentWarehouse_.getFloor(nextMovePos).type() == Floor::Type::Wall) {
+                currentWarehouse_.isObjectAtPos(nextMovePos) ||
+                currentWarehouse_.getFloor({
+                    static_cast<size_t>(nextMovePos.x()),
+                    static_cast<size_t>(nextMovePos.y())
+                    }).type() == Floor::Type::Wall) {
                 return;
             }
 
             currentWarehouse_.moveObject(objectIndex, nextMovePos);
-
             movesThisTurn.push_back({ movePos, nextMovePos });
         }
     }
-    currentWarehouse_.moveObject(playerIndex, movePos);
 
-    movesThisTurn.push_back({ playerPos,movePos });
+    currentWarehouse_.moveObject(playerIndex, movePos);
+    movesThisTurn.push_back({ playerPos, movePos });
+
     movesMade_.push(movesThisTurn);
 }
 
@@ -172,7 +175,16 @@ Game::loadLevel(const std::string& filePath) {
 
 bool
 Game::objectIsCrateOnDelivery(const Object& obj) const {
-    return obj.type() == Object::Type::Box && currentWarehouse_.getFloor(obj.pos()).type() == Floor::Type::Storage;
+    auto pos = obj.pos();
+
+    if (pos.x() < 0 || pos.y() < 0)
+        return false;
+
+    return obj.type() == Object::Type::Box &&
+        currentWarehouse_.getFloor({
+            static_cast<size_t>(pos.x()),
+            static_cast<size_t>(pos.y())
+            }).type() == Floor::Type::Storage;
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -182,20 +194,23 @@ Game::renderCurrentWarehouse() const {
     auto rows = currentWarehouse_.nRows();
     auto cols = currentWarehouse_.nCols();
 
-    for (int32_t row = 0; row < rows; row++) {
-        for (int32_t col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+        for (size_t col = 0; col < cols; col++) {
             auto floor = currentWarehouse_.getFloor({ col, row });
             console_.putChar(row * 2, col, {  floor.chr(),floor.color(),floor.color(), });
+            console_.putChar(row * 2 +1, col, { floor.chr(),floor.color(),floor.color(), });
         }
     }
 
-    console_.move(std::nullopt, tiage::V2i32{ static_cast<int>(rows) * 2 - 1, static_cast<int>(cols) });
+    console_.move(std::nullopt, tiage::Vec2<size_t>(rows * 2 - 1, cols));
 
     for (auto& object : currentWarehouse_.getObjects()) {
         if (objectIsCrateOnDelivery(object)) {
-            console_.putChar(2 * object.pos().y(), object.pos().x(), {  object.asciiCode(), tiage::Color::kGreen, tiage::Color::kGreen });
+            console_.putChar(2 * object.pos().y(), object.pos().x(), {  object.asciiCode(), tiage::Color::kNeonGreen, tiage::Color::kNeonGreen });
+            console_.putChar(2 * object.pos().y() + 1, object.pos().x(), { object.asciiCode(), tiage::Color::kNeonGreen, tiage::Color::kNeonGreen });
         } else {
             console_.putChar(2 * object.pos().y(), object.pos().x(), {  object.asciiCode(), object.color(), object.color() });
+            console_.putChar(2 * object.pos().y() + 1, object.pos().x(), { object.asciiCode(), object.color(), object.color() });
         }
     }
 

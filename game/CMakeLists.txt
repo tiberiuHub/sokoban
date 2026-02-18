@@ -10,7 +10,9 @@ set(TARGET ${PROJECT_NAME})
 set(TIAGE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../tiage")
 add_subdirectory(${TIAGE_DIR} "${CMAKE_CURRENT_BINARY_DIR}/tiage_build")
 
-add_executable(${TARGET}
+set(WIN32_EXECUTABLE TRUE)
+
+add_executable(${TARGET} WIN32
     "${CMAKE_CURRENT_SOURCE_DIR}/Floor.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Floor.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Game.cpp"

@@ -2,17 +2,18 @@
 
 #pragma once
 
-#include "Warehouse.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "Warehouse.h"
+#include <tiage/Vec2.h>
 
 namespace sokoban {
 
 // -------------------------------------------------------------------------------------------------
 
-Warehouse::Warehouse(uint32_t width, uint32_t height) : floor_(width, height) {}
+Warehouse::Warehouse(uint32_t width, uint32_t height) : floor_({ width, height }) {}
 
 // -------------------------------------------------------------------------------------------------
 
@@ -71,10 +72,10 @@ Warehouse::calculateDeliveryPositions() {
 
     targetPositions_.clear();
 
-    for (int32_t i = 0; i < floor_.nRows(); i++) {
-        for (int32_t j = 0; j < floor_.nCols(); j++) {
-            if (floor_.get(i, j).type() == Floor::Type::Storage) {
-                targetPositions_.push_back({ i, j });
+    for (size_t y = 0; y < floor_.nRows(); y++) {
+        for (size_t x = 0; x < floor_.nCols(); x++) {
+            if (floor_.get({ y,x }).type() == Floor::Type::Storage) {
+                targetPositions_.push_back({ static_cast<int>(y), static_cast<int>(x) });
             }
         }
     }
@@ -117,7 +118,7 @@ Warehouse::parseFromFile(const std::string& filePath) {
                 throw std::runtime_error("Invalid dimensions provided in file");
             }
                 
-            floor_ = tiage::Matrix<Floor>(height, width);
+            floor_ = tiage::Matrix<Floor>({ height, width });
 
         } else if (id == 'f') {
 
@@ -125,7 +126,7 @@ Warehouse::parseFromFile(const std::string& filePath) {
 
                 auto floorType = charToFloor(line[i]);
                 
-                floor_.set(i, floorLineCount, Floor(floorType));
+                floor_.set({  static_cast<size_t>(floorLineCount),i }, Floor(floorType));
 
             }
 
@@ -212,8 +213,8 @@ Warehouse::nCols() const {
 // -------------------------------------------------------------------------------------------------
 
 Floor
-Warehouse::getFloor(tiage::V2i32 pos) const {
-    return floor_.get(pos.y(), pos.x());
+Warehouse::getFloor(tiage::Vec2<size_t> pos) const {
+    return floor_.get(pos);
 }
 
 // -------------------------------------------------------------------------------------------------

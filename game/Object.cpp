@@ -15,7 +15,7 @@ Object::Object(Type type, tiage::V2i32 pos) :
     // the default look for a sokoban object
     static const std::unordered_map<Type, std::pair<char, tiage::Color>> defaults = {
         { Type::Player , { '@', tiage::Color::kRed } },
-        { Type::Box, { '#', tiage::Color::kTan} },
+        { Type::Box, { '#', tiage::Color::kCamel} },
     };
     asciiCode_ = defaults.at(type).first;
     color_ = defaults.at(type).second;
